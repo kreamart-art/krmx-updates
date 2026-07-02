@@ -1,0 +1,8 @@
+{
+  "product": "SMPLR",
+  "version": "v1.0.4",
+  "pkg": "https://krmx.artnomad.nl/smplr/SMPLR-1.0.4-mac.pkg",
+  "dmg": "https://krmx.artnomad.nl/smplr/SMPLR-1.0.4-mac.dmg",
+  "sha256": "https://krmx.artnomad.nl/smplr/SMPLR-1.0.4-mac.sha256",
+  "notes": "https://krmx.artnomad.nl/smplr/"
+}
