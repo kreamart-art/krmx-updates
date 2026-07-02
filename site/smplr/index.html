@@ -3,56 +3,488 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SMPLR — download</title>
+<title>SMPLR — KRMX Audio</title>
+<meta name="description" content="SMPLR: 16-pad drum sampler, transient slicer en stretch engine. Gebouwd door KRMX Audio voor macOS, VST3 en AU.">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="SMPLR — KRMX Audio">
+<meta property="og:description" content="16-pad drum sampler, transient slicer en stretch engine voor macOS.">
 <style>
-  :root { --bg:#0a0612; --panel:#120a20; --line:#2a1650; --txt:#d8c8f5; --dim:#8f7bb8; --acc:#be90ff; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--txt); font:15px/1.6 -apple-system, "Segoe UI", sans-serif;
-         min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
-  main { max-width:560px; width:100%; }
-  h1 { font-size:28px; letter-spacing:4px; color:var(--acc); }
-  .sub { color:var(--dim); margin-bottom:28px; }
-  .card { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:20px 22px; margin-bottom:16px; }
-  .card h2 { font-size:13px; letter-spacing:2px; color:var(--acc); text-transform:uppercase; margin-bottom:10px; }
-  a.btn { display:inline-block; background:#2c0a55; color:#e6d4ff; text-decoration:none;
-          padding:10px 18px; border-radius:5px; border:1px solid var(--acc); margin:4px 8px 4px 0; }
-  a.btn:hover { background:#3c0f7a; }
-  code, pre { background:#080410; border:1px solid var(--line); border-radius:4px;
-              font:12.5px/1.7 ui-monospace, Menlo, monospace; color:#c8b8ea; }
-  pre { padding:12px 14px; overflow-x:auto; margin-top:8px; }
-  code { padding:1px 5px; }
-  ol { padding-left:20px; }
-  .dim { color:var(--dim); font-size:13px; }
+  :root {
+    --background:#000000;
+    --foreground:#ffffff;
+    --muted:#a3a3a3;
+    --muted-strong:#737373;
+    --border:#1f1f1f;
+    --surface:#0a0a0a;
+    --accent:#e10600;
+    --accent-hover:#ff1a1a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  html, body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  a { color: inherit; text-decoration: none; }
+  img, svg { display: block; max-width: 100%; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 1024px) { .container { padding: 0 40px; } }
+
+  /* HEADER */
+  .site-header {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .site-header-inner {
+    height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .brand-mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    background: var(--accent); color: #fff;
+    font-size: 10px; letter-spacing: 0;
+  }
+  .brand-name span { color: var(--muted); font-weight: 500; }
+  .site-nav a {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: color 0.2s ease;
+  }
+  .site-nav a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    border-bottom: 1px solid var(--border);
+    padding: 64px 0;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .hero { padding: 96px 0; }
+    .hero-grid { grid-template-columns: 6fr 6fr; gap: 64px; }
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .eyebrow-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .hero h1 {
+    font-size: clamp(3rem, 8.5vw, 7.5rem);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  .hero-tagline {
+    margin-top: 24px;
+    font-size: clamp(16px, 1.5vw, 18px);
+    line-height: 1.5;
+    color: rgba(255,255,255,0.85);
+    max-width: 460px;
+  }
+  .format-badges {
+    margin-top: 32px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .badge {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+  }
+  .cta-row {
+    margin-top: 40px;
+    display: flex; flex-wrap: wrap; gap: 12px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 28px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn-secondary { color: #fff; border-color: rgba(255,255,255,0.25); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn svg { width: 14px; height: 14px; }
+  .version-note {
+    margin-top: 28px;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .version-note a { color: rgba(255,255,255,0.7); border-bottom: 1px solid var(--border); }
+  .version-note a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* Hero visual placeholder */
+  .hero-visual {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, #0a0a0a 0%, #050505 100%);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .hero-visual::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, transparent 49%, rgba(225,6,0,0.06) 50%, transparent 51%),
+      linear-gradient(0deg, transparent 49%, rgba(255,255,255,0.02) 50%, transparent 51%);
+    background-size: 40px 40px;
+    opacity: 0.5;
+  }
+  .hero-visual-label {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted-strong);
+    font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase;
+    text-align: center;
+  }
+  .status-pill {
+    position: absolute; top: 16px; left: 16px;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+    color: #fff;
+  }
+  .status-pill .eyebrow-dot { animation: pulse 2s ease-in-out infinite; }
+
+  /* SECTIONS */
+  .section {
+    border-bottom: 1px solid var(--border);
+    padding: 80px 0;
+  }
+  @media (min-width: 1024px) { .section { padding: 112px 0; } }
+  .section-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 20px;
+  }
+  .section-heading {
+    font-size: clamp(1.75rem, 3.5vw, 3rem);
+    font-weight: 700; line-height: 1.05; letter-spacing: -0.02em;
+    max-width: 640px;
+  }
+  .section-heading + .section-lead {
+    margin-top: 24px;
+    font-size: 16px; line-height: 1.6; color: var(--muted);
+    max-width: 540px;
+  }
+
+  /* FEATURES */
+  .features {
+    background: var(--surface);
+  }
+  .features .section-heading { margin-bottom: 56px; }
+  .features-grid {
+    display: grid; grid-template-columns: 1fr; gap: 32px;
+  }
+  @media (min-width: 640px) { .features-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; } }
+  @media (min-width: 1024px) { .features-grid { grid-template-columns: repeat(3, 1fr); gap: 48px; } }
+  .feature-num {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px;
+  }
+  .feature h3 {
+    font-size: 18px; font-weight: 600; letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+  .feature p {
+    color: var(--muted); font-size: 14px; line-height: 1.6;
+  }
+
+  /* INSTALL */
+  .install-grid {
+    display: grid; grid-template-columns: 1fr; gap: 40px;
+    margin-top: 48px;
+  }
+  @media (min-width: 1024px) {
+    .install-grid { grid-template-columns: 5fr 7fr; gap: 80px; align-items: start; }
+  }
+  .install-notice {
+    background: rgba(225,6,0,0.06);
+    border: 1px solid rgba(225,6,0,0.25);
+    padding: 24px;
+    font-size: 14px; line-height: 1.6;
+    color: rgba(255,255,255,0.85);
+  }
+  .install-notice strong {
+    display: block;
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .install-steps { list-style: none; counter-reset: step; }
+  .install-steps li {
+    counter-increment: step;
+    display: flex; gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .install-steps li:first-child { padding-top: 0; }
+  .install-steps li:last-child { border-bottom: none; padding-bottom: 0; }
+  .install-steps li::before {
+    content: counter(step, decimal-leading-zero);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
+    color: var(--accent);
+    flex-shrink: 0; width: 32px; padding-top: 2px;
+  }
+  .install-step-body { flex: 1; min-width: 0; }
+  .install-step-body p { color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.6; }
+  pre {
+    background: #000;
+    border: 1px solid var(--border);
+    padding: 16px;
+    margin-top: 14px;
+    font: 12.5px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color: #e5e5e5;
+    overflow-x: auto;
+  }
+  code {
+    font: 12.5px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    color: #f0f0f0;
+  }
+  .daw-note {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px; line-height: 1.6;
+  }
+
+  /* CTA */
+  .cta-band {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+  @media (min-width: 1024px) { .cta-band { padding: 112px 0; } }
+  .cta-band .section-heading {
+    margin: 0 auto 20px;
+    max-width: 720px;
+  }
+  .cta-band .section-lead { margin: 0 auto; }
+  .cta-band-cta { margin-top: 40px; display: inline-flex; }
+
+  /* FOOTER */
+  .site-footer {
+    padding: 40px 0 48px;
+    color: var(--muted);
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .site-footer-inner {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .site-footer-links {
+    display: flex; flex-wrap: wrap; gap: 28px;
+  }
+  .site-footer-links a { color: var(--muted); transition: color 0.2s; }
+  .site-footer-links a:hover { color: var(--accent); }
 </style>
 </head>
 <body>
-<main>
-  <h1>SMPLR</h1>
-  <p class="sub">Drum sampler en slicer van KRMX Audio, voor macOS (VST3 en AU).</p>
 
-  <div class="card">
-    <h2>Download</h2>
-    <a class="btn" href="SMPLR-1.0.4-mac.pkg">Installer (.pkg)</a>
-    <a class="btn" href="SMPLR-1.0.4-mac.dmg">Drag-install (.dmg)</a>
-    <p class="dim">Versie 1.0.4. Checksums: <a href="SMPLR-1.0.4-mac.sha256" style="color:var(--acc)">sha256</a></p>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container site-header-inner">
+    <a href="/" class="brand" aria-label="KRMX Audio">
+      <span class="brand-mark">K</span>
+      <span class="brand-name">KRMX <span>Audio</span></span>
+    </a>
+    <nav class="site-nav">
+      <a href="https://artnomad.nl">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 6l-6 6 6 6"/>
+        </svg>
+        Artnomad.nl
+      </a>
+    </nav>
   </div>
+</header>
 
-  <div class="card">
-    <h2>Eerste keer laden</h2>
-    <p>Deze build is nog niet door Apple genotariseerd. macOS blokkeert de plugin daarom bij de eerste keer laden. Eenmalig oplossen:</p>
-    <ol>
-      <li>Installeer via de pkg of dmg</li>
-      <li>Open Terminal en plak:</li>
-    </ol>
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <p class="eyebrow"><span class="eyebrow-dot"></span> KRMX Audio · Plugin</p>
+      <h1>SMPLR</h1>
+      <p class="hero-tagline">16-pad drum sampler, transient slicer en WSOLA stretch engine. Gebouwd voor makers, native op macOS.</p>
+
+      <div class="format-badges">
+        <span class="badge">VST3</span>
+        <span class="badge">AU</span>
+        <span class="badge">Standalone</span>
+        <span class="badge">macOS</span>
+        <span class="badge">C++ / JUCE</span>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" href="SMPLR-1.0.4-mac.pkg" download>
+          Download installer
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 4v12M6 12l6 6 6-6M4 20h16"/>
+          </svg>
+        </a>
+        <a class="btn btn-secondary" href="SMPLR-1.0.4-mac.dmg" download>
+          Drag-install (.dmg)
+        </a>
+      </div>
+
+      <p class="version-note">
+        Versie 1.0.4 · macOS · <a href="SMPLR-1.0.4-mac.sha256">sha256</a>
+      </p>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <span class="status-pill">
+        <span class="eyebrow-dot"></span>
+        Beta 1.0.4
+      </span>
+      <span class="hero-visual-label">Plugin visual placeholder</span>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section features">
+  <div class="container">
+    <p class="section-eyebrow">Wat zit erin</p>
+    <h2 class="section-heading">Alles wat je nodig hebt om te samplen, slicen en te bouwen.</h2>
+
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-num">01</div>
+        <h3>16-pad drum sampler</h3>
+        <p>Klassiek MPC-stijl grid met multi-layer sample support, per-pad envelope en filter.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-num">02</div>
+        <h3>Transient slicer</h3>
+        <p>Detecteer transients automatisch en verdeel loops direct over de pads voor snelle chops.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-num">03</div>
+        <h3>WSOLA stretch</h3>
+        <p>Time stretch zonder pitch verandering, geoptimaliseerd voor drums en loops.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-num">04</div>
+        <h3>Wavetable synth</h3>
+        <p>Ingebouwde subtractive en wavetable synth voor melodische en pad lagen.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-num">05</div>
+        <h3>808 bass engine</h3>
+        <p>Diepe 808's met eigen envelope, glide en drive sectie, direct speelbaar van je toetsenbord.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-num">06</div>
+        <h3>Chords &amp; AI</h3>
+        <p>Bouw chord progressions in de plugin, met AI-suggesties voor voicings en variaties.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL -->
+<section class="section">
+  <div class="container">
+    <p class="section-eyebrow">Eerste keer laden</p>
+    <h2 class="section-heading">Installeren en Gatekeeper voorbij.</h2>
+    <p class="section-lead">Deze build is nog niet door Apple genotariseerd. macOS blokkeert de plugin daarom bij de eerste keer laden, eenmalig oplossen met de stappen hieronder.</p>
+
+    <div class="install-grid">
+      <div>
+        <div class="install-notice">
+          <strong>Waarom deze stap?</strong>
+          Zonder Apple-notarization plaatst macOS de quarantine-vlag op nieuw geïnstalleerde plugins. Eén Terminal-commando haalt die vlag weg voor SMPLR, daarna gedraagt hij zich als elke andere plugin.
+        </div>
+      </div>
+      <div>
+        <ol class="install-steps">
+          <li>
+            <div class="install-step-body">
+              <p>Installeer via de <code>.pkg</code> of drag-install via de <code>.dmg</code>.</p>
+            </div>
+          </li>
+          <li>
+            <div class="install-step-body">
+              <p>Open Terminal en plak:</p>
 <pre>xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/SMPLR.vst3
 xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/Components/SMPLR.component</pre>
-    <ol start="3">
-      <li>Herstart je DAW en laat de plugins opnieuw scannen</li>
-    </ol>
-    <p class="dim">Logic en GarageBand gebruiken de AU (component); Ableton, FL Studio, Bitwig en Reaper de VST3.</p>
+            </div>
+          </li>
+          <li>
+            <div class="install-step-body">
+              <p>Herstart je DAW en laat de plugins opnieuw scannen.</p>
+            </div>
+          </li>
+        </ol>
+        <p class="daw-note">Logic en GarageBand gebruiken de AU (component). Ableton, FL Studio, Bitwig en Reaper gebruiken de VST3.</p>
+      </div>
+    </div>
   </div>
+</section>
 
-  <p class="dim">(C) 2026 KRMX Audio</p>
-</main>
+<!-- CTA BAND -->
+<section class="cta-band">
+  <div class="container">
+    <p class="section-eyebrow">Support</p>
+    <h2 class="section-heading">Loopt iets vast? We horen het graag.</h2>
+    <p class="section-lead">Stuur ons een bericht en we helpen je op weg, of het nu om installatie, licensing of een bug rapport gaat.</p>
+    <div class="cta-band-cta">
+      <a class="btn btn-primary" href="mailto:info@artnomad.nl?subject=SMPLR%20support">
+        Neem contact op
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 12h16M14 6l6 6-6 6"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <p>&copy; 2026 KRMX Audio · Made by Artnomad</p>
+    <div class="site-footer-links">
+      <a href="/">KRMX Home</a>
+      <a href="https://artnomad.nl">Artnomad</a>
+      <a href="mailto:info@artnomad.nl">Contact</a>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
