@@ -150,29 +150,20 @@
   .version-note a { color: rgba(255,255,255,0.7); border-bottom: 1px solid var(--border); }
   .version-note a:hover { color: var(--accent); border-color: var(--accent); }
 
-  /* Hero visual placeholder */
+  /* Hero visual */
   .hero-visual {
     position: relative;
-    aspect-ratio: 4 / 3;
-    background: linear-gradient(135deg, #0a0a0a 0%, #050505 100%);
+    aspect-ratio: 1218 / 625;
+    background: #060309;
     border: 1px solid var(--border);
     overflow: hidden;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8);
   }
-  .hero-visual::before {
-    content: "";
+  .hero-visual img {
     position: absolute; inset: 0;
-    background:
-      linear-gradient(90deg, transparent 49%, rgba(225,6,0,0.06) 50%, transparent 51%),
-      linear-gradient(0deg, transparent 49%, rgba(255,255,255,0.02) 50%, transparent 51%);
-    background-size: 40px 40px;
-    opacity: 0.5;
-  }
-  .hero-visual-label {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--muted-strong);
-    font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase;
-    text-align: center;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .status-pill {
     position: absolute; top: 16px; left: 16px;
@@ -378,12 +369,12 @@
         </p>
       </div>
 
-      <div class="hero-visual" aria-hidden="true">
+      <div class="hero-visual">
+        <img src="smplr-ui.webp" alt="SMPLR plugin interface, met 16 drum pads links en de slicer met transient bars rechts" width="1218" height="625" loading="eager" fetchpriority="high">
         <span class="status-pill">
           <span class="eyebrow-dot"></span>
           Beta 1.0.4
         </span>
-        <span class="hero-visual-label">Plugin visual placeholder</span>
       </div>
     </div>
   </div>
