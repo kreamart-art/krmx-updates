@@ -225,6 +225,10 @@
     display: grid; grid-template-columns: 1fr; gap: 40px;
     margin-top: 48px;
   }
+  /* Grid items mogen niet meegroeien met de intrinsieke breedte van de
+     pre erin (min-width:auto), anders rekt de xattr-regel de hele pagina
+     op mobiel op; met 0 scrollt de pre netjes in zijn eigen container. */
+  .install-grid > div { min-width: 0; }
   @media (min-width: 1024px) {
     .install-grid { grid-template-columns: 5fr 7fr; gap: 80px; align-items: start; }
   }
