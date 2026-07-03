@@ -342,30 +342,35 @@
       <div class="hero-text">
         <p class="eyebrow"><span class="eyebrow-dot"></span> KRMX Audio · Plugin</p>
       <h1>SMPLR</h1>
-      <p class="hero-tagline">16-pad drum sampler, transient slicer en WSOLA stretch engine. Gebouwd voor makers, native op macOS.</p>
+      <p class="hero-tagline">16-pad drum sampler, transient slicer en WSOLA stretch engine. Gebouwd voor makers, native op macOS, Windows en Linux.</p>
 
       <div class="format-badges">
         <span class="badge">VST3</span>
         <span class="badge">AU</span>
         <span class="badge">Standalone</span>
         <span class="badge">macOS</span>
+        <span class="badge">Windows</span>
+        <span class="badge">Linux</span>
         <span class="badge">C++ / JUCE</span>
       </div>
 
       <div class="cta-row">
-        <a class="btn btn-primary" href="SMPLR-1.0.4-mac.pkg" download>
-          Download installer
+        <a class="btn btn-primary" href="SMPLR-1.0.5-mac.pkg" download>
+          Download voor macOS
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 4v12M6 12l6 6 6-6M4 20h16"/>
           </svg>
         </a>
-        <a class="btn btn-secondary" href="SMPLR-1.0.4-mac.dmg" download>
-          Drag-install (.dmg)
+        <a class="btn btn-secondary" href="SMPLR-1.0.5-win-setup.exe" download>
+          Windows (setup)
+        </a>
+        <a class="btn btn-secondary" href="SMPLR-1.0.5-linux-x86_64.tar.gz" download>
+          Linux (tar.gz)
         </a>
       </div>
 
         <p class="version-note">
-          Versie 1.0.4 · macOS · <a href="SMPLR-1.0.4-mac.sha256">sha256</a>
+          Versie 1.0.5 · macOS, Windows en Linux · <a href="SMPLR-1.0.5-mac.sha256">sha256</a> · <a href="SMPLR-1.0.5-mac.dmg" download>mac .dmg</a> · <a href="SMPLR-1.0.5-win.zip" download>win .zip</a>
         </p>
       </div>
 
@@ -373,7 +378,7 @@
         <img src="smplr-ui.webp" alt="SMPLR plugin interface, met 16 drum pads links en de slicer met transient bars rechts" width="1218" height="625" loading="eager" fetchpriority="high">
         <span class="status-pill">
           <span class="eyebrow-dot"></span>
-          Beta 1.0.4
+          Beta 1.0.5
         </span>
       </div>
     </div>
@@ -456,6 +461,7 @@ xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/Components/SMPLR.compone
           </li>
         </ol>
         <p class="daw-note">Logic en GarageBand gebruiken de AU (component). Ableton, FL Studio, Bitwig en Reaper gebruiken de VST3.</p>
+        <p class="daw-note">Windows: de setup installeert de VST3 naar Common Files. SmartScreen kan eenmalig waarschuwen; kies Meer informatie en daarna Toch uitvoeren. Linux: pak de tar.gz uit en draai <code>./install.sh</code>, die de plugin naar <code>~/.vst3</code> kopieert.</p>
       </div>
     </div>
   </div>
